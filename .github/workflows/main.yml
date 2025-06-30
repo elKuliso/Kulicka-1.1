@@ -22,11 +22,11 @@ jobs:
       
       - name: Install build dependencies
         run: |
-         sudo apt-get update
-         sudo apt-get install -y python3-pip python3-setuptools zip unzip openjdk-17-jdk \
-         autoconf automake libtool pkg-config
-         pip3 install --upgrade pip
-         pip3 install buildozer
+          sudo apt-get update
+          sudo apt-get install -y python3-pip python3-setuptools zip unzip openjdk-17-jdk \
+            autoconf automake libtool pkg-config
+          pip3 install --upgrade pip
+          pip3 install buildozer
     
       - name: Buildozer environment
         run: |
