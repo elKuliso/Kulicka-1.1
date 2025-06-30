@@ -1,1 +1,77 @@
+name: Build Android APK
 
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool libffi-dev
+
+      - name: Update buildozer and python-for-android
+        run: pip install --upgrade buildozer python-for-android
+    
+      - name: Buildozer environment
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer cython
+          sudo apt-get update
+          sudo apt-get install -y zip unzip openjdk-17-jdk
+
+      - name: Stáhni a rozbal Android cmdline-tools
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
+          unzip -q cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+
+      - name: Přijmi Android SDK licence
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT/licenses
+          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $ANDROID_SDK_ROOT/licenses/android-sdk-license
+          echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_SDK_ROOT/licenses/android-sdk-preview-license
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: Instaluj Android Build Tools 36.0.0 a platform-tools
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "build-tools;36.0.0" "platform-tools"
+
+      - name: Debug sdkmanager path
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          ls -lR $ANDROID_SDK_ROOT/cmdline-tools/
+
+      - name: Buildozer workaround:symlink sdkmanager do tools/bin
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT/tools/bin
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest/bin
+          cp $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/ || true
+          ln -sf $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager $ANDROID_SDK_ROOT/tools/bin/sdkmanager
+
+      - name: Build APK
+        run: buildozer -v android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release.apk
+          path: bin/*.apk
