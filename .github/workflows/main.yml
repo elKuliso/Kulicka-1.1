@@ -48,18 +48,18 @@ jobs:
           export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
           $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "build-tools;36.0.0" "platform-tools"
 
-      - name: Buildozer workaround: symlink sdkmanager do tools/bin
+      - name: Debug sdkmanager path
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          ls -lR $ANDROID_SDK_ROOT/cmdline-tools/
+
+      - name: Buildozer workaround:symlink sdkmanager do tools/bin
         run: |
           export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
           mkdir -p $ANDROID_SDK_ROOT/tools/bin
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest/bin
           cp $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/ || true
           ln -sf $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager $ANDROID_SDK_ROOT/tools/bin/sdkmanager
-
-      - name: Debug sdkmanager path
-        run: |
-          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
-          ls -lR $ANDROID_SDK_ROOT/cmdline-tools/
 
       - name: Build APK
         run: buildozer -v android debug
