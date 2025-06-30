@@ -24,7 +24,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip python3-setuptools zip unzip openjdk-17-jdk \
-            autoconf automake libtool libtool-bin pkg-config
+            autoconf automake libtool libtool-bin pkg-config m4
           pip3 install --upgrade pip
           pip3 install buildozer
     
