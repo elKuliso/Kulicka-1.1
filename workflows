@@ -1,0 +1,33 @@
+name: Buildozer Android APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip python3-setuptools git zip unzip openjdk-17-jdk
+          pip3 install --user buildozer cython
+
+      - name: Build APK
+        run: |
+          export PATH=$PATH:~/.local/bin
+          buildozer -v android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: kulinka-apk
+          path: bin/*.apk
