@@ -5,7 +5,7 @@ package.domain = org.example
 version = 1.0
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
-requirements = python3.10, pygame==2.1.3
+requirements = python3.10, pygame==2.1.3, cython, pyjnius>=1.5.0
 orientation = portrait
 fullscreen = 1
 log_level = 2
