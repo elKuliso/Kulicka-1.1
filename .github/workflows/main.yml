@@ -68,6 +68,16 @@ jobs:
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest/bin
           cp $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/ || true
           ln -sf $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager $ANDROID_SDK_ROOT/tools/bin/sdkmanager
+     
+      - name: Fix autotools in .buildozer
+        run: |
+          if [ -d ".buildozer" ]; then
+            find .buildozer -type f \( -name "configure.ac" -o -name "configure.in" \) | while read f; do
+              d=$(dirname "$f")
+              echo "Running libtoolize/autoreconf in $d"
+              (cd "$d" && libtoolize || true; autoreconf --install || true)
+            done
+          fi
 
       - name: Build APK
         run: buildozer -v android debug
