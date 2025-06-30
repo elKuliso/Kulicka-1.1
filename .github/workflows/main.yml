@@ -56,6 +56,11 @@ jobs:
           cp $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/ || true
           ln -sf $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager $ANDROID_SDK_ROOT/tools/bin/sdkmanager
 
+      - name: Debug sdkmanager path
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          ls -lR $ANDROID_SDK_ROOT/cmdline-tools/
+
       - name: Build APK
         run: buildozer -v android debug
 
