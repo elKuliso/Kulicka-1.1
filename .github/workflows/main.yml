@@ -21,9 +21,10 @@ jobs:
           python-version: '3.10'
       
       - name: Install build dependencies
-        run: |
-         sudo apt-get update
-         sudo apt-get install -y autoconf automake libtool libffi-dev
+        run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool libffi-dev
+
+      - name: Update buildozer and python-for-android
+        run: pip install --upgrade buildozer python-for-android
     
       - name: Buildozer environment
         run: |
