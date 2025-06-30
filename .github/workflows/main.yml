@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build APK with Buildozer
-        uses: kivy/buildozer-action@master
+        uses: kivy/buildozer-action@v1
         with:
           target: android
           buildozer-version: stable
