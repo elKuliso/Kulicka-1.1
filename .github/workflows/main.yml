@@ -79,6 +79,9 @@ jobs:
             done
           fi
 
+      - name: Remove .buildozer cache
+        run: rm -rf .buildozer
+
       - name: Build APK
         run: buildozer -v android debug
 
