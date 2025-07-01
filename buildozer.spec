@@ -5,7 +5,7 @@ package.domain = org.example
 version = 1.0
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
-requirements = python3.9, pygame==2.1.3, cython==0.29.36, https://github.com/elKuliso/pyjnius/archive/refs/heads/master.zip
+requirements = python3.9, pygame==2.1.3, cython==0.29.36, pyjnius
 orientation = portrait
 fullscreen = 1
 log_level = 2
