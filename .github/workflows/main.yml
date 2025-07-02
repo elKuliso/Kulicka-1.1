@@ -79,6 +79,12 @@ jobs:
             done
           fi
 
+      - name: Debug - find jnius
+        run: find . -iname "jnius*"
+      - name: Debug - list project files
+        run: ls -laR
+      - name: Debug - pip freeze
+        run: pip freeze
       - name: Remove all build caches
         run: |
           rm -rf .buildozer
