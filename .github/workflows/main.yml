@@ -79,8 +79,12 @@ jobs:
             done
           fi
 
-      - name: Remove .buildozer cache
-        run: rm -rf .buildozer
+      - name: Remove all build caches
+        run: |
+          rm -rf .buildozer
+          rm -rf ~/.buildozer
+          rm -rf ~/.local/share/python-for-android
+          rm -rf bin
 
       - name: Build APK
         run: buildozer -v android debug
