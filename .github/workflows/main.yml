@@ -51,10 +51,17 @@ jobs:
           echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_SDK_ROOT/licenses/android-sdk-preview-license
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: Instaluj Android Build Tools 36.0.0 a platform-tools
+      - name: Instaluj Android Build Tools 34.0.0 a platform-tools
         run: |
           export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "build-tools;36.0.0" "platform-tools"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "build-tools;34.0.0" "platform-tools"
+      - name: Zkontroluj build-tools a aidl
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          echo "Obsah složky build-tools:"
+          ls -l $ANDROID_SDK_ROOT/build-tools || true
+          echo "Hledám AIDL binárky:"
+          find $ANDROID_SDK_ROOT/build-tools -name aidl || true
 
       - name: Debug sdkmanager path
         run: |
